@@ -80,15 +80,23 @@ class Config {
 
     const baseConfig = require(path.join(config.projectRoot, './cypress'))
     this.finalConfig = { ...baseConfig, ...this.finalConfig }
-    config.baseUrl = this.finalConfig.baseUrl
+
+    /**
+     * Copy baseUrl from fixtures of the current product, team, environment into final config
+     */
+    if (!this.finalConfig.baseUrl) {
+      const routes = require(`${path.resolve(
+        '.',
+        'cypress/fixtures/',
+        `${team ? team + '/' : ''}${product}/routes.json`,
+      )}`)
+
+      this.finalConfig.baseUrl = routes[env].baseUrl
+    }
 
     if (this.CONFIG.logging) {
       console.log('[Plugin:Config] Config set:', this.finalConfig)
     }
-  }
-
-  getConfig() {
-    return this.finalConfig
   }
 }
 
