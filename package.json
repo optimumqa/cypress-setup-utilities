@@ -8,17 +8,20 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/optimumqa/cypress-plugin.git"
+    "url": "https://github.com/optimumqa/cypress-setup-utilities.git"
   },
   "author": "bussines.optimumqa@gmail.com",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/optimumqa/cypress-plugin/issues"
+    "url": "https://github.com/optimumqa/cypress-setup-utilities/issues"
   },
-  "homepage": "https://github.com/optimumqa/cypress-plugin#readme",
+  "homepage": "https://github.com/optimumqa/cypress-setup-utilities#readme",
   "devDependencies": {
     "del": "^6.1.0",
     "lodash": "^4.17.21",
     "semantic-release": "^19.0.5"
+  },
+  "scripts": {
+    "semantic-release": "semantic-release"
   }
 }
