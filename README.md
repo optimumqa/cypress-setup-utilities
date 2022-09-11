@@ -13,7 +13,7 @@ Cypress plugin for use with [cypress-multi-product-template](https://github.com/
 
 Read more about the boilerplate project [here](https://github.com/optimumqa/cypress-multi-product-template/blob/main/README.md)
 
-### Installation
+## Installation
 
 ```sh
 npm install cypress-setup-utilities
