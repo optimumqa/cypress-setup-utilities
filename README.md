@@ -31,7 +31,7 @@ module.exports = (on, config) => {
 }
 ```
 
-## What's inside?
+## What is inside?
 
 ### Stores
 
