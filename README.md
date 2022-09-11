@@ -1,4 +1,4 @@
-<h1 align="center">Welcome to cypress-setup-utilities 👋</h1>
+<h1 align="center">Welcome to cypress-setup-utilities 👋 </h1>
 <a href="https://github.com/optimumqa/cypress-setup-utilities/blob/main/LICENSE">
   <img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-yellow.svg" target="_blank" />
 </a>
