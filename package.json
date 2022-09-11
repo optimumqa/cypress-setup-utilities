@@ -16,7 +16,7 @@
     "url": "https://github.com/optimumqa/cypress-setup-utilities/issues"
   },
   "homepage": "https://github.com/optimumqa/cypress-setup-utilities#readme",
-  "devDependencies": {
+  "dependencies": {
     "del": "^6.1.0",
     "lodash": "^4.17.21",
     "semantic-release": "^19.0.5"
