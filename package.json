@@ -1,7 +1,7 @@
 {
   "name": "@optimumqa/cypress-setup-utilities",
   "version": "0.0.1",
-  "description": "",
+  "description": "Populates your Cypress config and adds some helpers.",
   "main": "src/index.js",
   "files": [
     "src"
@@ -10,7 +10,12 @@
     "type": "git",
     "url": "https://github.com/optimumqa/cypress-setup-utilities.git"
   },
-  "author": "bussines.optimumqa@gmail.com",
+  "keywords": [
+    "cypress",
+    "cypress-utilities",
+    "cypress-helpers"
+  ],
+  "author": "Optimum QA <bussines.optimumqa@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/optimumqa/cypress-setup-utilities/issues"
@@ -18,7 +23,9 @@
   "homepage": "https://github.com/optimumqa/cypress-setup-utilities#readme",
   "dependencies": {
     "del": "^6.1.0",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
     "semantic-release": "^19.0.5"
   },
   "scripts": {
