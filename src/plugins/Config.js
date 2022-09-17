@@ -3,7 +3,9 @@ const path = require('path')
 
 class Config {
   constructor(on, config, pluginConfig) {
-    this.finalConfig = {}
+    this.finalConfig = {
+      e2e: {},
+    }
 
     this.CONFIG = {
       ...{
@@ -36,38 +38,40 @@ class Config {
       type = 'default'
     }
 
-    try {
-      const myConfigPath = path.resolve('.', 'cypress/configs/', 'cypress.local.json')
-      if (!config.env.product && fs.existsSync(myConfigPath)) {
-        this.finalConfig = require(myConfigPath)
-        if (this.CONFIG.logging) {
-          console.log(`\n[Plugin:Config]: Local config found.`)
-        }
-      }
-    } catch (error) {
-      console.error(error)
+    this.finalConfig = require(path.resolve(
+      '.',
+      'cypress/configs',
+      `${team ? team + '/' : ''}${product}/${type}.ts`,
+    )).default
+
+    if (!this.finalConfig.e2e) {
+      this.finalConfig.e2e = {}
     }
 
-    if (!Object.keys(this.finalConfig).length) {
-      this.finalConfig = require(path.resolve(
-        '.',
-        'cypress/configs',
-        `${team ? team + '/' : ''}${product}/${type}.json`,
-      ))
-    }
-
-    if (!this.finalConfig.testFiles || !this.finalConfig.testFiles.length) {
-      this.finalConfig.testFiles = [`**/${team ? team + '/' : ''}${product}/**/*`]
+    if (!this.finalConfig.e2e.specPattern || !this.finalConfig.e2e.specPattern.length) {
+      this.finalConfig.e2e.specPattern = [`cypress/e2e/${team ? team + '/' : ''}${product}/**/*`]
     }
 
     if (!this.finalConfig.env) {
       this.finalConfig.env = {}
+
+      if (!this.finalConfig.env.PRODUCT) {
+        this.finalConfig.env.PRODUCT = product
+      }
+
+      if (!this.finalConfig.env.TEAM) {
+        this.finalConfig.env.TEAM = team
+      }
+
+      if (!this.finalConfig.env.ENV) {
+        this.finalConfig.env.ENV = env
+      }
+
+      if (!this.finalConfig.env.TYPE) {
+        this.finalConfig.env.TYPE = type
+      }
     }
 
-    this.finalConfig.env.PRODUCT = product
-    this.finalConfig.env.TEAM = team
-    this.finalConfig.env.ENV = env
-    this.finalConfig.env.TYPE = type
     this.finalConfig.env.originalConfig = originalConfig
 
     if (this.CONFIG.logging) {
@@ -78,20 +82,33 @@ class Config {
       console.log('[Plugin:Config] Original config: ', JSON.stringify(this.finalConfig.env.originalConfig))
     }
 
-    const baseConfig = require(path.join(config.projectRoot, './cypress'))
-    this.finalConfig = { ...baseConfig, ...this.finalConfig }
-
     /**
      * Copy baseUrl from fixtures of the current product, team, environment into final config
      */
-    if (!this.finalConfig.baseUrl) {
-      const routes = require(`${path.resolve(
-        '.',
-        'cypress/fixtures/',
-        `${team ? team + '/' : ''}${product}/routes.json`,
-      )}`)
+    const routes = require(`${path.resolve(
+      '.',
+      'cypress/fixtures/',
+      `${team ? team + '/' : ''}${product}/routes.json`,
+    )}`)
 
-      this.finalConfig.baseUrl = routes[env].baseUrl
+    if (!this.finalConfig.e2e.baseUrl) {
+      this.finalConfig.e2e.baseUrl = routes[env].baseUrl
+    }
+
+    try {
+      const myConfigPath = path.resolve('.', 'cypress/configs/', 'cypress.local.ts')
+      if (fs.existsSync(myConfigPath)) {
+        this.finalConfig = {
+          ...this.finalConfig,
+          ...require(myConfigPath).default,
+        }
+
+        if (this.CONFIG.logging) {
+          console.log(`\n[Plugin:Config]: Local config found.`)
+        }
+      }
+    } catch (error) {
+      console.error(error)
     }
 
     if (this.CONFIG.logging) {
