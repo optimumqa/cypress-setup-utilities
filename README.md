@@ -9,9 +9,9 @@
   <img alt="Javascript" src="https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E" target="_blank" />
 </a>
 
-Cypress plugin for use with [cypress-multi-product-template](https://github.com/optimumqa/cypress-multi-product-template).
+Cypress plugin for use with [cypress-boilerplate](https://github.com/optimumqa/cypress-boilerplate).
 
-Read more about the boilerplate project [here](https://github.com/optimumqa/cypress-multi-product-template/blob/main/README.md)
+Read more about the boilerplate project [here](https://github.com/optimumqa/cypress-boilerplate/blob/main/README.md)
 
 ## Installation
 
@@ -21,6 +21,8 @@ npm install cypress-setup-utilities
 
 ## Usage
 
+### Cypress version < v10
+
 ```js
 // ./cypress/plugins/index.js
 
@@ -29,6 +31,23 @@ module.exports = (on, config) => {
 
   return config
 }
+```
+
+### Cypress version >= 10
+
+```js
+import { defineConfig } from 'cypress'
+
+const finalConfig = defineConfig({
+  e2e: {
+    setupNodeEvents(on, config) {
+      // Setup plugins
+      config = import('@optimumqa/cypress-setup-utilities')(on, config)
+
+      return config
+    },
+  },
+})
 ```
 
 ## What is inside?
@@ -99,9 +118,9 @@ Cypress.env('originalConfig')
 
 Test files are set depending on the `team` and `product` arguments.
 
-`testFiles` inside the config will be populated with all spec files from `./cypress/integration/team/product/**/*`.
+`specPattern` inside the config will be populated with all spec files from `./cypress/e2e/team/product/**/*`.
 
-> This will only happen if you have not specified `testFiles` already.
+> This will only happen if you have not specified `specPattern` already.
 
 So when you run
 
@@ -109,11 +128,7 @@ So when you run
 $ cypress run --env product=yourProductName
 ```
 
-It will give you only the spec files from `./cypress/integration/yourProductname/`.
-
-#### Local config
-
-If you have a local config, `cypress.local.json` inside of `./cypress/configs` it will be merged with the default config.
+It will give you only the spec files from `./cypress/e2e/yourProductname/`.
 
 #### Type based configs
 
@@ -121,11 +136,11 @@ If you have the need to specify different config types for any reason. You can d
 
 For example:
 
-- Create `daily.json` where we have the need to specify only 3 spec files
+- Create `daily.ts` where we have the need to specify only 3 spec files
 
 ```json
 {
-  "testFiles": ["**/your-product-name/spec1.ts", "**/your-product-name/spec2.ts", "**/your-product-name/spec3.ts"]
+  "specPattern": ["**/your-product-name/spec1.ts", "**/your-product-name/spec2.ts", "**/your-product-name/spec3.ts"]
 }
 ```
 
@@ -134,22 +149,31 @@ Then you create a command in package.json inside `scripts`:
 ```json
 {
   "scripts": {
-    "yourProductName-staging-daily": "cypress run --env product=yourProductName,env=staging,type=daily"
+    "yourProductName-staging-daily": "cypress run -e product=yourProductName,env=staging,type=daily"
   }
 }
 ```
 
-To sum up, both `cypress.local.json` and `./cypress/configs/your-product-name/daily.json` will be merged into the global `./cypress.json` in that order.
+#### Local config
+
+Create a file `cypress.local.ts` inside `./cypress/configs/`. Your local config will be then merged with the global config and product config.
+
+Here you can place your overrides.
+
+> If you need to temporarily disable this file, just rename it.
+> Example: cypress.local.ts -> cypress.local-tmp.ts
+
+It is ignored by GIT.
 
 #### baseUrl
 
-By default, in the [parent boilerplate](https://github.com/optimumqa/cypress-multi-product-template), three environments are created: [staging, release, production] inside the `./cypress/fixtures/yourProductName/` populated with the `baseUrl` per environment.
+By default, in the [parent boilerplate](https://github.com/optimumqa/cypress-boilerplate), three environments are created: [staging, release, production] inside the `./cypress/fixtures/yourProductName/` populated with the `baseUrl` per environment.
 
 When you run cypress, this plugin will take the baseUrl of the current product and environment, and set it to the final cypress config if you have the need to get the `baseUrl` from there, and not from the fixtures `routes.json` file.
 
-Therefor, you can have multiple products inside the [parent boilerplate](https://github.com/optimumqa/cypress-multi-product-template), as this plugin sets up your config depending on the parameters you've given it.
+Therefor, you can have multiple products inside the [parent boilerplate](https://github.com/optimumqa/cypress-boilerplate), as this plugin sets up your config depending on the parameters you've given it.
 
-Keeps the package.json clutter free and gives it intuitive commands to run.
+Keeps the `package.json` clutter free and gives it intuitive commands to run.
 
 ### Delete passed video
 
@@ -158,7 +182,7 @@ Deletes videos from passed test cases.
 ## Summary
 
 - Project is dynamically set up based on the four arguments above
-- If you specify `baseUrl` or `testFiles` in configs, they will not be overwritten.
+- If you specify `baseUrl` or `specPattern` in configs, they will not be overwritten.
 
 ## 🤝 Contributing
 
