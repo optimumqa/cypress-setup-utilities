@@ -21,18 +21,6 @@ npm install cypress-setup-utilities
 
 ## Usage
 
-### Cypress version < v10
-
-```js
-// ./cypress/plugins/index.js
-
-module.exports = (on, config) => {
-  config = require('@optimumqa/cypress-setup-utilities')(on, config)
-
-  return config
-}
-```
-
 ### Cypress version >= 10
 
 ```js
@@ -49,6 +37,8 @@ const finalConfig = defineConfig({
   },
 })
 ```
+
+Lower versions than v10 are not supported.
 
 ## What is inside?
 
@@ -114,7 +104,7 @@ Cypress.env('TYPE')
 Cypress.env('originalConfig')
 ```
 
-#### testFiles
+#### specPattern
 
 Test files are set depending on the `team` and `product` arguments.
 
@@ -138,9 +128,11 @@ For example:
 
 - Create `daily.ts` where we have the need to specify only 3 spec files
 
-```json
-{
-  "specPattern": ["**/your-product-name/spec1.ts", "**/your-product-name/spec2.ts", "**/your-product-name/spec3.ts"]
+```js
+export default {
+  e2e: {
+    specPattern: ['**/your-product-name/spec1.ts', '**/your-product-name/spec2.ts', '**/your-product-name/spec3.ts'],
+  },
 }
 ```
 
