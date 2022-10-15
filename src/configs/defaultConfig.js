@@ -6,12 +6,6 @@ const DEFAULT_CONFIG = [
     instance: null,
   },
   {
-    name: 'Store',
-    enabled: true,
-    options: {},
-    instance: null,
-  },
-  {
     name: 'Config',
     enabled: true,
     options: {},

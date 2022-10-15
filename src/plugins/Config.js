@@ -76,7 +76,7 @@ class Config {
 
     if (this.CONFIG.logging) {
       console.log('[Plugin:Config] Product: ', this.finalConfig.env.PRODUCT)
-      console.log('[Plugin:Config] Team: ', this.finalConfig.env.PRODUCT)
+      console.log('[Plugin:Config] Team: ', this.finalConfig.env.TEAM)
       console.log('[Plugin:Config] Environment: ', this.finalConfig.env.ENV)
       console.log('[Plugin:Config] Type: ', this.finalConfig.env.TYPE)
       console.log('[Plugin:Config] Original config: ', JSON.stringify(this.finalConfig.env.originalConfig))
