@@ -54,22 +54,27 @@ class Config {
 
     if (!this.finalConfig.env) {
       this.finalConfig.env = {}
+    }
 
-      if (!this.finalConfig.env.PRODUCT) {
-        this.finalConfig.env.PRODUCT = product
-      }
+    if (!this.finalConfig.env.PRODUCT) {
+      this.finalConfig.env.PRODUCT = product
+    }
 
-      if (!this.finalConfig.env.TEAM) {
-        this.finalConfig.env.TEAM = team
-      }
+    if (!this.finalConfig.env.TEAM) {
+      this.finalConfig.env.TEAM = team
+    }
 
-      if (!this.finalConfig.env.ENV) {
-        this.finalConfig.env.ENV = env
-      }
+    if (!this.finalConfig.env.ENV) {
+      this.finalConfig.env.ENV = env
+    }
 
-      if (!this.finalConfig.env.TYPE) {
-        this.finalConfig.env.TYPE = type
-      }
+    if (!this.finalConfig.env.TYPE) {
+      this.finalConfig.env.TYPE = type
+    }
+
+    this.finalConfig.env = {
+      ...this.finalConfig.env,
+      ...config.env,
     }
 
     this.finalConfig.env.originalConfig = originalConfig
