@@ -1,6 +1,9 @@
 const fs = require('fs-extra')
 const path = require('path')
 
+const defaultEnvironment = 'staging'
+const defaultType = 'default'
+
 class Config {
   constructor(on, config, pluginConfig) {
     this.finalConfig = {
@@ -23,33 +26,28 @@ class Config {
     const configClone = JSON.parse(JSON.stringify(config.env))
     const originalConfig = {
       product: configClone.product,
-      team: configClone.team,
       env: configClone.env,
       type: configClone.type,
     }
 
-    let { product, team, env, type } = config.env
+    let { product, env, type } = config.env
 
     if (!env) {
-      env = 'staging'
+      env = defaultEnvironment
     }
 
     if (!type) {
-      type = 'default'
+      type = defaultType
     }
 
-    this.finalConfig = require(path.resolve(
-      '.',
-      'cypress/configs',
-      `${team ? team + '/' : ''}${product}/${type}.ts`,
-    )).default
+    this.finalConfig = require(path.resolve('.', 'cypress/configs', `${product}/${type}.ts`)).default
 
     if (!this.finalConfig.e2e) {
       this.finalConfig.e2e = {}
     }
 
-    if (!this.finalConfig.e2e.specPattern || !this.finalConfig.e2e.specPattern.length) {
-      this.finalConfig.e2e.specPattern = [`cypress/e2e/${team ? team + '/' : ''}${product}/**/*`]
+    if (!this.finalConfig.specPattern || !this.finalConfig.specPattern.length) {
+      this.finalConfig.specPattern = [`cypress/e2e/${product}/**/*`]
     }
 
     if (!this.finalConfig.env) {
@@ -58,10 +56,6 @@ class Config {
 
     if (!this.finalConfig.env.PRODUCT) {
       this.finalConfig.env.PRODUCT = product
-    }
-
-    if (!this.finalConfig.env.TEAM) {
-      this.finalConfig.env.TEAM = team
     }
 
     if (!this.finalConfig.env.ENV) {
@@ -81,20 +75,15 @@ class Config {
 
     if (this.CONFIG.logging) {
       console.log('[Plugin:Config] Product: ', this.finalConfig.env.PRODUCT)
-      console.log('[Plugin:Config] Team: ', this.finalConfig.env.TEAM)
       console.log('[Plugin:Config] Environment: ', this.finalConfig.env.ENV)
       console.log('[Plugin:Config] Type: ', this.finalConfig.env.TYPE)
       console.log('[Plugin:Config] Original config: ', JSON.stringify(this.finalConfig.env.originalConfig))
     }
 
     /**
-     * Copy baseUrl from fixtures of the current product, team, environment into final config
+     * Copy baseUrl from fixtures of the current product, environment into final config
      */
-    const routes = require(`${path.resolve(
-      '.',
-      'cypress/fixtures/',
-      `${team ? team + '/' : ''}${product}/routes.json`,
-    )}`)
+    const routes = require(`${path.resolve('.', 'cypress/fixtures/', `${product}/routes.json`)}`)
 
     if (!this.finalConfig.e2e.baseUrl) {
       this.finalConfig.e2e.baseUrl = routes[env].baseUrl
