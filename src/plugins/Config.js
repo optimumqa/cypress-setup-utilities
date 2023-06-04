@@ -86,7 +86,7 @@ class Config {
     const routes = require(`${path.resolve('.', 'cypress/fixtures/', `${product}/routes.json`)}`)
 
     if (!this.finalConfig.e2e.baseUrl) {
-      this.finalConfig.e2e.baseUrl = routes[env].baseUrl
+      this.finalConfig.e2e.baseUrl = routes.envs[env].baseUrl
     }
 
     try {
