@@ -81,22 +81,20 @@ cy.task('getItem', {
 
 This part takes your environment variables passed in CLI, and saves them to your config.
 
-This particular project looks for following arguments: `[product, team, env, type]`
+This particular project looks for following arguments: `[product, env, type]`
 
 | name      | type     | default   |
 | --------- | -------- | --------- |
 | `product` | `String` | undefined |
-| `team`    | `String` | undefined |
 | `env`     | `String` | `staging` |
 | `type`    | `String` | `default` |
 
-> `team` and `type` can be excluded
+> `type` can be excluded
 
 You can access these arguments from the config using
 
 ```js
 Cypress.env('PRODUCT')
-Cypress.env('TEAM')
 Cypress.env('ENV')
 Cypress.env('TYPE')
 
@@ -106,9 +104,9 @@ Cypress.env('originalConfig')
 
 #### specPattern
 
-Test files are set depending on the `team` and `product` arguments.
+Test files are set depending on the `product` argument.
 
-`specPattern` inside the config will be populated with all spec files from `./cypress/e2e/team/product/**/*`.
+`specPattern` inside the config will be populated with all spec files from `./cypress/e2e/product/**/*`.
 
 > This will only happen if you have not specified `specPattern` already.
 
