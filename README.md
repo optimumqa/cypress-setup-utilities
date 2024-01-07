@@ -42,41 +42,6 @@ Lower versions than v10 are not supported.
 
 ## What is inside?
 
-### Stores
-
-Enables you to create stores while running your spec files.
-
-Can be useful if you need to save a token inside one spec, and re-use it inside another.
-
-You can have infinite stores.
-
-Example of setting a new item into 'CommonStore'.
-
-> If the store does not exist, it will be created:
-
-```js
-cy.task('setItem', {
-  storeId: 'CommonStore',
-  item: {
-    name: 'token',
-    value: 'foo',
-  },
-})
-```
-
-Example of getting an item from a store:
-
-```js
-cy.task('getItem', {
-  storeId: 'CommonStore',
-  item: {
-    name: 'token',
-  },
-}).then((item) => {
-  console.log(item)
-})
-```
-
 ### Config
 
 This part takes your environment variables passed in CLI, and saves them to your config.
